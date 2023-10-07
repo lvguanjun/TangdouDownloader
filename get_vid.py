@@ -2,6 +2,7 @@ import json
 import os
 
 json_dir = "input"
+add_json = "input/add.json"
 
 
 def get_vid_set():
@@ -16,6 +17,21 @@ def get_vid_set():
             else:
                 for item in datas:
                     vid_set.add(item["vid"])
+    return vid_set
+
+
+def get_add_vid(last_vid: int):
+    """
+    获取截至到last_vid的所有视频的vid，用于获取新增收藏视频
+    """
+    vid_set = set()
+    with open(add_json) as f:
+        content = json.load(f)
+        datas = content["datas"]
+        for item in datas:
+            if item["vid"] == last_vid:
+                break
+            vid_set.add(item["vid"])
     return vid_set
 
 
