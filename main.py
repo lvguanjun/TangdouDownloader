@@ -1,8 +1,6 @@
 import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import re
+import sys
 import threading
 import time
 from queue import Queue
@@ -164,13 +162,15 @@ def download_video(q: Queue):
         q.task_done()
 
 
-def bulk_download(max_threads=5):
+def bulk_download(max_threads=5, last_vid=None):
     # Download all videos in the vid_set
-    path = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(path, "Bulk_Download")
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(base_path, "Bulk_Download")
+    if last_vid:
+        path = os.path.join(base_path, "Add_Download")
     if not os.path.exists(path):  # Create the directory if it does not exist
         os.mkdir(path)
-    vid_set = get_vid_set()
+    vid_set = get_vid_set(last_vid)
     td = tangdou.VideoAPI()
     q = Queue()
     for _ in range(max_threads):  # Use 5 threads
@@ -188,6 +188,7 @@ def bulk_download(max_threads=5):
             print(f"vid: {vid} 下载失败！")
             continue
     q.join()
+    print("批量下载完成！")
 
 
 if __name__ == "__main__":
@@ -197,8 +198,12 @@ if __name__ == "__main__":
     print("============================================================")
     is_bulk = input("是否批量下载（y/n）:")
     if is_bulk in ["y", "Y"]:
-        bulk_download()
-        print("批量下载完成！")
+        last_vid = input("请输入上次下载的最后一个视频的vid编号（默认为全量下载）:")
+        if last_vid:
+            last_vid = int(last_vid)
+        else:
+            last_vid = None
+        bulk_download(last_vid=last_vid)
     else:
         while True:
             main()

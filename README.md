@@ -68,7 +68,9 @@ KeyboardInterrupt
 
 > Linux 用户可以自行安装 python 以及使用 `pip install -r requirement.txt` 安装依赖，执行命令 `python main.py` 运行程序
 
-> 支持批量下载糖豆视频，可通过抓包获取喜欢、收藏、下载的请求结果，将响应体保存至 `input` 文件中，程序会自动解析文件中的请求结果并下载视频。
+> 支持批量下载糖豆视频，通过更换 `collect_request/collect.py` 和 `get_vid.py` 中的相关请求参数，获取收藏的请求结果批量下载。
+
+> 理论上应该通过配置文件来配置请求参数，但当前仅个人使用，故未进行配置文件的编写。
 
 # 实现方法
 
